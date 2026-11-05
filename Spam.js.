@@ -1,0 +1,23 @@
+const { Client } = require('discord.js-selfbot-v13');
+const client = new Client();
+
+const TOKEN = 'YOUR_DISCORD_USER_TOKEN'; // Get this from browser DevTools (F12 -> Application -> Local Storage)
+const CHANNEL_IDS = ['YOUR_CHANNEL_ID']; // Add as many as you want
+const YOUR_LINK = 'YOUR_NETLIFY_LINK';
+const MESSAGE = `Yo, they're giving out free Nitro here ${YOUR_LINK} before it expires!`;
+
+client.on('ready', async () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+    while(true) {
+        for (const channelId of CHANNEL_IDS) {
+            try {
+                const channel = await client.channels.fetch(channelId);
+                await channel.send(MESSAGE);
+                console.log(`Sent to ${channelId}`);
+                await new Promise(r => setTimeout(r, 15000)); // 15 sec delay
+            } catch (e) { console.log(`Failed ${channelId}`); }
+        }
+        await new Promise(r => setTimeout(r, 60000)); // Wait 1 min before looping again
+    }
+});
+client.login(TOKEN);
